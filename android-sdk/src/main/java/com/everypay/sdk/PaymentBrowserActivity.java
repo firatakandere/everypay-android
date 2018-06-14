@@ -227,8 +227,16 @@ public class PaymentBrowserActivity extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return false; // then it is not handled by default action
+            log.d("shouldOverrideUrlLoading: " + url);
+            boolean isBrowserFlowEndUrl = isBrowserFlowEndUrl(url);
+            if (isBrowserFlowEndUrl) {
+                log.d("shouldOverrideUrlLoading (yes, payment end): " + url);
+                onBrowserFlowEnded(url);
+                return true;
+            }
+
+            super.shouldOverrideUrlLoading(view, url);
+            return false; // let the WebView handle the URL always
         }
 
         @Override
